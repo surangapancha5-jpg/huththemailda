@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090909" />
+  <title>ZANTA-XMD | Bot Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="glow glow-one"></div><div class="glow glow-two"></div>
+  <main class="shell">
+    <section id="loginView" class="login-wrap">
+      <div class="login-card">
+        <div class="brand-mark">Z</div>
+        <p class="eyebrow">BOT MANAGEMENT PLATFORM</p>
+        <h1>ZANTA<span>-XMD</span></h1>
+        <p class="muted">Sign in to your command center</p>
+        <form id="loginForm">
+          <label>Admin username</label>
+          <input id="username" autocomplete="username" placeholder="Enter username" required />
+          <label>Password</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" required />
+          <button class="primary-btn" type="submit">ACCESS DASHBOARD <b>↗</b></button>
+          <p id="loginError" class="error"></p>
+        </form>
+        <div class="secure-note"><span></span> SECURE ADMIN ACCESS</div>
+      </div>
+    </section>
+
+    <section id="dashboardView" class="dashboard hidden">
+      <aside class="sidebar">
+        <div class="side-brand"><div class="mini-mark">Z</div><div><b>ZANTA-XMD</b><small>CONTROL CENTER</small></div></div>
+        <div class="nav-label">WORKSPACE</div>
+        <a class="nav-item active" href="#"><span>▦</span> Overview</a>
+        <a class="nav-item" href="#bots"><span>◈</span> Bot fleet</a>
+        <div class="side-bottom">
+          <div class="admin-chip"><div class="avatar">A</div><div><b id="adminName">Admin</b><small>Administrator</small></div></div>
+          <button id="logoutBtn" class="logout-btn">↪ Sign out</button>
+        </div>
+      </aside>
+
+      <section class="main-panel">
+        <header class="topbar">
+          <div><p class="eyebrow">OVERVIEW / LIVE MONITORING</p><h2>Dashboard <span class="live-pill"><i></i> LIVE</span></h2></div>
+          <div class="top-actions"><span id="lastUpdated">Waiting for data...</span><button id="refreshBtn" class="icon-btn" title="Refresh">↻</button></div>
+        </header>
+
+        <div class="welcome-banner">
+          <div><p class="eyebrow">ZANTA-XMD NETWORK</p><h3>Your bots. One command center.</h3><p>Monitor your connected WhatsApp bots in real time.</p></div>
+          <div class="banner-symbol">Z<span>✦</span></div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Total bots</span><b class="stat-icon">◈</b></div><strong id="totalBots">0</strong><small>Registered bots</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Online bots</span><b class="stat-icon green">●</b></div><strong id="onlineBots">0</strong><small class="green-text">Currently active</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Offline bots</span><b class="stat-icon red">●</b></div><strong id="offlineBots">0</strong><small>Not responding</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Total messages</span><b class="stat-icon">✉</b></div><strong id="totalMessages">0</strong><small>Reported by bots</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Total users</span><b class="stat-icon">♙</b></div><strong id="totalUsers">0</strong><small>Reported by bots</small></article>
+        </div>
+
+        <section class="table-card" id="bots">
+          <div class="table-heading"><div><p class="eyebrow">NETWORK STATUS</p><h3>Bot fleet</h3></div><span class="count-label" id="botCountLabel">0 BOTS</span></div>
+          <div class="table-scroll"><table><thead><tr><th>BOT</th><th>PLATFORM</th><th>STATUS</th><th>MESSAGES</th><th>USERS</th><th>LAST SEEN</th><th></th></tr></thead><tbody id="botRows"><tr><td colspan="7" class="empty">No bots connected yet. Send a heartbeat from your bot to register it.</td></tr></tbody></table></div>
+        </section>
+        <footer>© <span id="year"></span> ZANTA-XMD · Built for your bot network</footer>
+      </section>
+    </section>
+  </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
