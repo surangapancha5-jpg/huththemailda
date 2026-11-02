@@ -1,94 +1,162 @@
-<!DOCTYPE html>
-<html lang="si">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#101018">
-<title>ZANTA Keyboard</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#090b12"><title>ZANTA MODS</title>
 <style>
-:root{--bg:#090a10;--panel:#151722;--key:#252938;--key2:#30364a;--red:#ff3855;--blue:#258cff;--text:#f5f6fb}
-*{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 15% 0%,#20213a 0,#090a10 48%);color:var(--text);font-family:system-ui,"Noto Sans Sinhala",sans-serif;min-height:100vh;display:flex;justify-content:center;padding:18px 10px}
-.app{width:min(760px,100%);background:rgba(18,20,30,.96);border:1px solid #303447;border-radius:24px;padding:18px;box-shadow:0 18px 55px #0009}
-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
-.logo{font-weight:900;font-size:25px;letter-spacing:2px;color:var(--red)}.logo span{color:var(--blue)}
-.badge{font-size:11px;color:#b9c2d9;border:1px solid #343b50;border-radius:20px;padding:6px 10px}
-label{display:block;color:#aeb7cc;font-size:13px;margin:0 0 8px}
-textarea{width:100%;height:118px;resize:vertical;background:#090c15;color:white;border:1px solid #343b50;border-radius:15px;padding:14px;font:18px/1.6 system-ui,"Noto Sans Sinhala",sans-serif;outline:none}
-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 2px #258cff22}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 15px}
-button{border:0;color:white;cursor:pointer;font:600 14px system-ui;border-radius:11px;padding:11px 13px;background:var(--key2);touch-action:manipulation}
-button:active{transform:scale(.96);filter:brightness(1.25)}
-.toolbar button.active{background:linear-gradient(110deg,var(--red),#9d315e)}
-.toolbar .blue{background:#145da9}
-.keyboard{background:#0d1019;border:1px solid #292f41;border-radius:17px;padding:9px}
-.row{display:flex;justify-content:center;gap:5px;margin:5px 0}
-.key{flex:1;min-width:0;min-height:47px;padding:5px 2px;background:linear-gradient(180deg,#30364a,#202536);border:1px solid #414961;border-radius:9px;font-size:clamp(13px,3.6vw,18px);font-weight:500;display:flex;align-items:center;justify-content:center;white-space:nowrap}
-.key.special{background:#174d82;border-color:#276ca9}.key.danger{background:#8d2940;border-color:#b43b55}
-.key.space{flex:5}.key.small{flex:1.4}
-.hint{font-size:12px;color:#8994ad;text-align:center;margin:12px 0 0;line-height:1.5}
-footer{text-align:center;color:#68738b;font-size:11px;margin-top:15px}
-@media(min-width:600px){.key{min-height:54px;font-size:20px}.app{padding:24px}}
+:root{--bg:#090b12;--panel:#121725;--panel2:#1a2233;--line:#293449;--red:#ff3657;--blue:#258cff;--txt:#f4f6fb;--muted:#98a5bc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px system-ui,Arial;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 15px;color:white;background:linear-gradient(110deg,var(--red),#b22c70);font-weight:700}
+input{width:100%;padding:14px;background:#0b101b;border:1px solid var(--line);border-radius:12px;color:white;outline:none;margin:6px 0 13px}
+input:focus{border-color:var(--blue)}label{font-size:13px;color:var(--muted)}
+header{height:65px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#0d111c}
+.brand{font-weight:900;letter-spacing:2px;font-size:21px;color:var(--red)}.brand span{color:var(--blue)}
+.wrap{max-width:1050px;margin:auto;padding:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}
+.auth{max-width:440px;margin:7vh auto}.sub{color:var(--muted);line-height:1.5}.hidden{display:none!important}
+.row{display:flex;gap:10px;align-items:center}.row>*{flex:1}.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{background:var(--panel2);flex:1}.tabs .on{background:linear-gradient(110deg,var(--red),#b22c70)}
+#app{display:grid;grid-template-columns:320px 1fr;gap:15px;height:calc(100vh - 105px);min-height:500px}
+.side,.chat{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.sidehead,.chathead{padding:15px;border-bottom:1px solid var(--line)}.userline{display:flex;align-items:center;gap:10px}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--blue));display:grid;place-items:center;font-weight:900}
+#userList{overflow:auto}.person{display:flex;gap:10px;padding:13px 15px;border-bottom:1px solid #222b3a;cursor:pointer}.person:hover{background:var(--panel2)}
+.person small{display:block;color:var(--muted);margin-top:4px}.person strong{overflow-wrap:anywhere}
+.messages{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:10px;background:radial-gradient(circle at top right,#17213a55,transparent 45%)}
+.bubble{max-width:78%;padding:10px 13px;border-radius:15px;background:#202a3d;align-self:flex-start;overflow-wrap:anywhere}
+.bubble.mine{background:#792b50;align-self:flex-end}.bubble small{display:block;color:#d5d8e4aa;font-size:10px;margin-top:5px;text-align:right}
+.send{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.send input{margin:0}.send button{white-space:nowrap}
+.notice{font-size:12px;color:var(--muted);margin-top:12px}.error{color:#ff8295;white-space:pre-wrap;font-size:13px}
+#recaptcha-container{margin:8px 0}
+@media(max-width:700px){.wrap{padding:10px}#app{display:block;height:calc(100dvh - 85px);min-height:0}.side{height:100%}.chat{height:100%;display:none}#app.chat-open .side{display:none}#app.chat-open .chat{display:flex}.auth{margin:4vh auto}}
 </style>
 </head>
 <body>
-<main class="app">
-<header><div class="logo">ZANTA<span> KEYBOARD</span></div><div class="badge">SINHALA · ENGLISH · EMOJI</div></header>
-<label for="output">ඔබගේ පණිවිඩය මෙතැන ලියන්න / Type here</label>
-<textarea id="output" placeholder="මෙතැන ටයිප් කරන්න..."></textarea>
-<div class="toolbar">
-<button class="active" id="siBtn" onclick="setMode('si')">සිංහල</button>
-<button id="enBtn" onclick="setMode('en')">English</button>
-<button id="emojiBtn" onclick="setMode('emoji')">😀 Emoji</button>
-<button class="blue" onclick="copyText()">Copy</button>
-<button onclick="clearText()">Clear</button>
+<header><div class="brand">ZANTA <span>MODS</span></div><button id="logout" class="hidden">Log out</button></header>
+<main class="wrap">
+<section id="auth" class="card auth">
+<h2 id="authTitle">Create your account</h2><p class="sub">Real accounts with phone verification. You need an SMS-capable phone number.</p>
+<div class="tabs"><button id="registerTab" class="on">Register</button><button id="loginTab">Login</button></div>
+<div id="registerFields">
+<label>Username</label><input id="username" placeholder="e.g. zanta_user" maxlength="24" autocomplete="username">
+<label>Phone number (include country code)</label><input id="phone" placeholder="+947XXXXXXXX" autocomplete="tel">
+<label>Password</label><input id="password" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+<div id="recaptcha-container"></div>
+<button id="sendOtp" style="width:100%">Send real SMS OTP</button>
+<div id="otpArea" class="hidden"><label>6-digit OTP</label><input id="otp" inputmode="numeric" maxlength="6" placeholder="Enter SMS code"><button id="verifyOtp" style="width:100%">Verify & create account</button></div>
 </div>
-<section class="keyboard" id="keyboard" aria-label="On-screen keyboard"></section>
-<p class="hint">මෙය වෙබ් පිටුව තුළ ක්‍රියා කරන On-screen Keyboard එකකි. වෙනත් Apps වල Android system keyboard එකක් ලෙස භාවිතා කිරීමට නොහැක.</p>
-<footer> ZANTA KEYBOARD · Made for mobile</footer>
+<div id="loginFields" class="hidden">
+<label>Phone number (include country code)</label><input id="loginPhone" placeholder="+947XXXXXXXX" autocomplete="tel">
+<label>Password</label><input id="loginPassword" type="password" autocomplete="current-password">
+<button id="doLogin" style="width:100%">Login</button>
+<p class="notice">First registration requires SMS OTP. Returning users sign in with phone number and password.</p>
+</div>
+<p id="authError" class="error"></p>
+<p class="notice">Use only your own phone number. Never share your OTP or password.</p>
+</section>
+
+<section id="app" class="hidden">
+<aside class="side">
+<div class="sidehead"><div class="userline"><div class="avatar" id="myAvatar">Z</div><div><strong id="myName">ZANTA USER</strong><div class="sub">Find people by username</div></div></div>
+<input id="search" placeholder="Search username…">
+</div><div id="userList"></div>
+</aside>
+<section class="chat">
+<div class="chathead row"><button id="back" class="hidden" style="flex:0 0 auto;background:#273149">←</button><div><strong id="chatName">Choose a user</strong><div class="sub" id="chatSub">Messages are private to chat participants</div></div></div>
+<div class="messages" id="messages"><p class="sub">Search for a username to start chatting.</p></div>
+<form class="send" id="sendForm"><input id="messageInput" placeholder="Write a message…" maxlength="4000" disabled><button id="sendButton" disabled>Send</button></form>
+</section>
+</section>
 </main>
-<script>
-const layouts={
-en:[
-['q','w','e','r','t','y','u','i','o','p'],
-['a','s','d','f','g','h','j','k','l'],
-['⇧','z','x','c','v','b','n','m','⌫'],
-['?123',',','SPACE','.','↵']
-],
-si:[
-['අ','ආ','ඇ','ඈ','ඉ','ඊ','උ','ඌ','එ','ඒ'],
-['ඔ','ඕ','ක','ඛ','ග','ඝ','ච','ජ','ට'],
-['ඩ','ණ','ත','ථ','ද','ධ','න','ප','බ'],
-['ම','ය','ර','ල','ව','ස','හ','ළ','ෆ'],
-['ං','ඃ','ැ','ෑ','ි','ී','ු','ූ','SPACE','⌫'],
-['?123',',','සි/EN','.','↵']
-],
-emoji:[
-['😀','😁','😂','🤣','😊','😍','🥰','😘'],
-['😎','😭','😢','😡','🤔','🙄','😴','🤗'],
-['❤️','💕','💖','🔥','✨','👍','🙏','👏'],
-['🎉','💯','🌹','🌸','🥺','😇','🤝','☀️'],
-['ABC','SPACE','⌫','↵']
-]
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, EmailAuthProvider, linkWithCredential, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, orderBy, onSnapshot, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+// Replace this object with your Firebase project's Web App configuration.
+const firebaseConfig = {
+  apiKey: "PASTE_FIREBASE_API_KEY",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT_ID.appspot.com",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
 };
-let mode='si',shift=false;
-const box=document.getElementById('output'), keyboard=document.getElementById('keyboard');
-function setMode(m){mode=m;document.querySelectorAll('.toolbar button').forEach(b=>b.classList.remove('active'));document.getElementById(({si:'siBtn',en:'enBtn',emoji:'emojiBtn'})[m]).classList.add('active');render()}
-function insert(value){const start=box.selectionStart,end=box.selectionEnd;box.setRangeText(value,start,end,'end');box.focus()}
-function press(k){
- if(k==='SPACE'){insert(' ');return}
- if(k==='↵'){insert('\\n');return}
- if(k==='⌫'){let s=box.selectionStart,e=box.selectionEnd;if(s===e&&s>0)s--;box.setRangeText('',s,e,'end');box.focus();return}
- if(k==='⇧'){shift=!shift;render();return}
- if(k==='ABC'){setMode('en');return}
- if(k==='සි/EN'){setMode(mode==='si'?'en':'si');return}
- if(k==='?123'){setMode('emoji');return}
- insert(mode==='en'&&shift?k.toUpperCase():k);if(shift){shift=false;render()}
+const $ = id => document.getElementById(id);
+const authBox=$("auth"), appBox=$("app");
+let app,auth,db,confirmation=null,recaptcha=null,currentUser=null,currentProfile=null,activePeer=null,stopMessages=null;
+let mode="register";
+function err(e){$("authError").textContent=e?.message||String(e)}
+function normalizePhone(v){return v.replace(/[^\d+]/g,"")}
+function accountEmail(phone){return "p"+phone.replace(/\D/g,"")+"@zanta-mods.invalid"}
+function validConfig(){return firebaseConfig.apiKey.startsWith("AIza") && !firebaseConfig.projectId.startsWith("PASTE")}
+try{if(validConfig()){app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);onAuthStateChanged(auth,async u=>{if(u){currentUser=u;await loadProfile()}else{currentUser=null;showAuth()}})}}catch(e){err(e)}
+function showAuth(){$("auth").classList.remove("hidden");appBox.classList.add("hidden");$("logout").classList.add("hidden")}
+function showApp(){$("auth").classList.add("hidden");appBox.classList.remove("hidden");$("logout").classList.remove("hidden");$("myName").textContent=currentProfile.username;$("myAvatar").textContent=currentProfile.username[0].toUpperCase()}
+async function loadProfile(){const snap=await getDoc(doc(db,"users",currentUser.uid));if(!snap.exists()){await signOut(auth);err("Profile not found. Please register again.");return}currentProfile=snap.data();showApp()}
+$("registerTab").onclick=()=>{mode="register";$("registerTab").classList.add("on");$("loginTab").classList.remove("on");$("registerFields").classList.remove("hidden");$("loginFields").classList.add("hidden");$("authTitle").textContent="Create your account";err("")};
+$("loginTab").onclick=()=>{mode="login";$("loginTab").classList.add("on");$("registerTab").classList.remove("on");$("loginFields").classList.remove("hidden");$("registerFields").classList.add("hidden");$("authTitle").textContent="Welcome back";err("")};
+$("sendOtp").onclick=async()=>{
+ try{
+  if(!validConfig())throw Error("Add your Firebase Web App config in public/index.html first.");
+  const username=$("username").value.trim(),phone=normalizePhone($("phone").value),password=$("password").value;
+  if(!/^[a-zA-Z0-9_]{3,24}$/.test(username))throw Error("Username: 3–24 letters, numbers or underscore.");
+  if(!phone.startsWith("+")||phone.length<9)throw Error("Enter phone number with country code, e.g. +947XXXXXXXX.");
+  if(password.length<8)throw Error("Password must be at least 8 characters.");
+  $("sendOtp").disabled=true;
+  if(!recaptcha)recaptcha=new RecaptchaVerifier(auth,"recaptcha-container",{size:"normal"});
+  confirmation=await signInWithPhoneNumber(auth,phone,recaptcha);
+  $("otpArea").classList.remove("hidden");$("sendOtp").textContent="OTP sent — resend";err("");
+ }catch(e){err(e);if(recaptcha){try{await recaptcha.render()}catch{}}}finally{$("sendOtp").disabled=false}
+};
+$("verifyOtp").onclick=async()=>{
+ try{
+  if(!confirmation)throw Error("Request an OTP first.");
+  const result=await confirmation.confirm($("otp").value.trim()),u=result.user;
+  const username=$("username").value.trim(),phone=normalizePhone($("phone").value),password=$("password").value;
+  const email=accountEmail(phone),credential=EmailAuthProvider.credential(email,password);
+  await linkWithCredential(u,credential);
+  const usernameRef=doc(db,"usernames",username.toLowerCase());
+  await runTransaction(db,async tx=>{
+   const taken=await tx.get(usernameRef);if(taken.exists())throw Error("Username already taken.");
+   tx.set(usernameRef,{uid:u.uid});
+   tx.set(doc(db,"users",u.uid),{uid:u.uid,username,usernameLower:username.toLowerCase(),createdAt:serverTimestamp()});
+  });
+ }catch(e){err(e)}
+};
+$("doLogin").onclick=async()=>{
+ try{
+  if(!validConfig())throw Error("Add your Firebase Web App config in public/index.html first.");
+  const phone=normalizePhone($("loginPhone").value),password=$("loginPassword").value;
+  await signInWithEmailAndPassword(auth,accountEmail(phone),password);
+ }catch(e){err(e)}
+};
+$("logout").onclick=()=>signOut(auth);
+$("search").addEventListener("input",async()=>{
+ const term=$("search").value.trim().toLowerCase();$("userList").innerHTML="";
+ if(term.length<2)return;
+ try{const q=query(collection(db,"users"),where("usernameLower",">=",term),where("usernameLower","<=",term+"\uf8ff"));const snaps=await getDocs(q);
+ snaps.forEach(s=>{const u=s.data();if(u.uid===currentUser.uid)return;const el=document.createElement("div");el.className="person";el.innerHTML=`<div class="avatar">${escapeHtml(u.username[0].toUpperCase())}</div><div><strong>${escapeHtml(u.username)}</strong><small>Tap to message</small></div>`;el.onclick=()=>openChat(u);$("userList").appendChild(el)});
+ }catch(e){err(e)}
+});
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function threadId(a,b){return [a,b].sort().join("_")}
+async function openChat(peer){
+ activePeer=peer;$("chatName").textContent=peer.username;$("chatSub").textContent="Private conversation";$("messageInput").disabled=false;$("sendButton").disabled=false;$("back").classList.remove("hidden");appBox.classList.add("chat-open");
+ if(stopMessages)stopMessages();
+ const id=threadId(currentUser.uid,peer.uid),ref=doc(db,"chats",id);
+ await setDoc(ref,{participants:[currentUser.uid,peer.uid],updatedAt:serverTimestamp()},{merge:true});
+ stopMessages=onSnapshot(query(collection(db,"chats",id,"messages"),orderBy("createdAt","asc")),snap=>{
+  const box=$("messages");box.innerHTML="";
+  snap.forEach(s=>{const m=s.data(),b=document.createElement("div");b.className="bubble"+(m.senderId===currentUser.uid?" mine":"");b.textContent=m.text;const time=document.createElement("small");time.textContent=m.createdAt?.toDate?.().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})||"Sending…";b.appendChild(time);box.appendChild(b)});
+  box.scrollTop=box.scrollHeight;
+ });
 }
-function render(){keyboard.innerHTML='';layouts[mode].forEach(row=>{let r=document.createElement('div');r.className='row';row.forEach(k=>{let b=document.createElement('button');b.type='button';b.className='key'+(['SPACE'].includes(k)?' space':'')+(['⇧','?123','සි/EN','ABC','↵'].includes(k)?' special':'')+(k==='⌫'?' danger':'');b.textContent=k==='SPACE'?'Space':k;b.onclick=()=>press(k);r.appendChild(b)});keyboard.appendChild(r)})}
-async function copyText(){try{await navigator.clipboard.writeText(box.value);alert('Copied!')}catch(e){box.select();document.execCommand('copy');alert('Copied!')}}
-function clearText(){box.value='';box.focus()}
-render();
+$("back").onclick=()=>appBox.classList.remove("chat-open");
+$("sendForm").onsubmit=async e=>{
+ e.preventDefault();const text=$("messageInput").value.trim();if(!text||!activePeer)return;
+ $("messageInput").value="";
+ try{const id=threadId(currentUser.uid,activePeer.uid);await addDoc(collection(db,"chats",id,"messages"),{text,senderId:currentUser.uid,createdAt:serverTimestamp()});await setDoc(doc(db,"chats",id),{participants:[currentUser.uid,activePeer.uid],lastMessage:text,updatedAt:serverTimestamp()},{merge:true})}
+ catch(e){err(e);$("messageInput").value=text}
+};
+if(!validConfig())err("Setup needed: create a Firebase project, enable Phone + Email/Password sign-in, add a Web App, then paste its config into this file.");
 </script>
-</body>
-</html>
+</body></html>
