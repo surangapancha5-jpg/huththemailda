@@ -1,76 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#090909" />
-  <title>ZANTA-XMD | Bot Control Center</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#101018">
+<title>ZANTA Keyboard</title>
+<style>
+:root{--bg:#090a10;--panel:#151722;--key:#252938;--key2:#30364a;--red:#ff3855;--blue:#258cff;--text:#f5f6fb}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 0%,#20213a 0,#090a10 48%);color:var(--text);font-family:system-ui,"Noto Sans Sinhala",sans-serif;min-height:100vh;display:flex;justify-content:center;padding:18px 10px}
+.app{width:min(760px,100%);background:rgba(18,20,30,.96);border:1px solid #303447;border-radius:24px;padding:18px;box-shadow:0 18px 55px #0009}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.logo{font-weight:900;font-size:25px;letter-spacing:2px;color:var(--red)}.logo span{color:var(--blue)}
+.badge{font-size:11px;color:#b9c2d9;border:1px solid #343b50;border-radius:20px;padding:6px 10px}
+label{display:block;color:#aeb7cc;font-size:13px;margin:0 0 8px}
+textarea{width:100%;height:118px;resize:vertical;background:#090c15;color:white;border:1px solid #343b50;border-radius:15px;padding:14px;font:18px/1.6 system-ui,"Noto Sans Sinhala",sans-serif;outline:none}
+textarea:focus{border-color:var(--blue);box-shadow:0 0 0 2px #258cff22}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 15px}
+button{border:0;color:white;cursor:pointer;font:600 14px system-ui;border-radius:11px;padding:11px 13px;background:var(--key2);touch-action:manipulation}
+button:active{transform:scale(.96);filter:brightness(1.25)}
+.toolbar button.active{background:linear-gradient(110deg,var(--red),#9d315e)}
+.toolbar .blue{background:#145da9}
+.keyboard{background:#0d1019;border:1px solid #292f41;border-radius:17px;padding:9px}
+.row{display:flex;justify-content:center;gap:5px;margin:5px 0}
+.key{flex:1;min-width:0;min-height:47px;padding:5px 2px;background:linear-gradient(180deg,#30364a,#202536);border:1px solid #414961;border-radius:9px;font-size:clamp(13px,3.6vw,18px);font-weight:500;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.key.special{background:#174d82;border-color:#276ca9}.key.danger{background:#8d2940;border-color:#b43b55}
+.key.space{flex:5}.key.small{flex:1.4}
+.hint{font-size:12px;color:#8994ad;text-align:center;margin:12px 0 0;line-height:1.5}
+footer{text-align:center;color:#68738b;font-size:11px;margin-top:15px}
+@media(min-width:600px){.key{min-height:54px;font-size:20px}.app{padding:24px}}
+</style>
 </head>
 <body>
-  <div class="glow glow-one"></div><div class="glow glow-two"></div>
-  <main class="shell">
-    <section id="loginView" class="login-wrap">
-      <div class="login-card">
-        <div class="brand-mark">Z</div>
-        <p class="eyebrow">BOT MANAGEMENT PLATFORM</p>
-        <h1>ZANTA<span>-XMD</span></h1>
-        <p class="muted">Sign in to your command center</p>
-        <form id="loginForm">
-          <label>Admin username</label>
-          <input id="username" autocomplete="username" placeholder="Enter username" required />
-          <label>Password</label>
-          <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" required />
-          <button class="primary-btn" type="submit">ACCESS DASHBOARD <b>↗</b></button>
-          <p id="loginError" class="error"></p>
-        </form>
-        <div class="secure-note"><span></span> SECURE ADMIN ACCESS</div>
-      </div>
-    </section>
-
-    <section id="dashboardView" class="dashboard hidden">
-      <aside class="sidebar">
-        <div class="side-brand"><div class="mini-mark">Z</div><div><b>ZANTA-XMD</b><small>CONTROL CENTER</small></div></div>
-        <div class="nav-label">WORKSPACE</div>
-        <a class="nav-item active" href="#"><span>▦</span> Overview</a>
-        <a class="nav-item" href="#bots"><span>◈</span> Bot fleet</a>
-        <div class="side-bottom">
-          <div class="admin-chip"><div class="avatar">A</div><div><b id="adminName">Admin</b><small>Administrator</small></div></div>
-          <button id="logoutBtn" class="logout-btn">↪ Sign out</button>
-        </div>
-      </aside>
-
-      <section class="main-panel">
-        <header class="topbar">
-          <div><p class="eyebrow">OVERVIEW / LIVE MONITORING</p><h2>Dashboard <span class="live-pill"><i></i> LIVE</span></h2></div>
-          <div class="top-actions"><span id="lastUpdated">Waiting for data...</span><button id="refreshBtn" class="icon-btn" title="Refresh">↻</button></div>
-        </header>
-
-        <div class="welcome-banner">
-          <div><p class="eyebrow">ZANTA-XMD NETWORK</p><h3>Your bots. One command center.</h3><p>Monitor your connected WhatsApp bots in real time.</p></div>
-          <div class="banner-symbol">Z<span>✦</span></div>
-        </div>
-
-        <div class="stats-grid">
-          <article class="stat-card"><div class="stat-top"><span>Total bots</span><b class="stat-icon">◈</b></div><strong id="totalBots">0</strong><small>Registered bots</small></article>
-          <article class="stat-card"><div class="stat-top"><span>Online bots</span><b class="stat-icon green">●</b></div><strong id="onlineBots">0</strong><small class="green-text">Currently active</small></article>
-          <article class="stat-card"><div class="stat-top"><span>Offline bots</span><b class="stat-icon red">●</b></div><strong id="offlineBots">0</strong><small>Not responding</small></article>
-          <article class="stat-card"><div class="stat-top"><span>Total messages</span><b class="stat-icon">✉</b></div><strong id="totalMessages">0</strong><small>Reported by bots</small></article>
-          <article class="stat-card"><div class="stat-top"><span>Total users</span><b class="stat-icon">♙</b></div><strong id="totalUsers">0</strong><small>Reported by bots</small></article>
-        </div>
-
-        <section class="table-card" id="bots">
-          <div class="table-heading"><div><p class="eyebrow">NETWORK STATUS</p><h3>Bot fleet</h3></div><span class="count-label" id="botCountLabel">0 BOTS</span></div>
-          <div class="table-scroll"><table><thead><tr><th>BOT</th><th>PLATFORM</th><th>STATUS</th><th>MESSAGES</th><th>USERS</th><th>LAST SEEN</th><th></th></tr></thead><tbody id="botRows"><tr><td colspan="7" class="empty">No bots connected yet. Send a heartbeat from your bot to register it.</td></tr></tbody></table></div>
-        </section>
-        <footer>© <span id="year"></span> ZANTA-XMD · Built for your bot network</footer>
-      </section>
-    </section>
-  </main>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/app.js"></script>
+<main class="app">
+<header><div class="logo">ZANTA<span> KEYBOARD</span></div><div class="badge">SINHALA · ENGLISH · EMOJI</div></header>
+<label for="output">ඔබගේ පණිවිඩය මෙතැන ලියන්න / Type here</label>
+<textarea id="output" placeholder="මෙතැන ටයිප් කරන්න..."></textarea>
+<div class="toolbar">
+<button class="active" id="siBtn" onclick="setMode('si')">සිංහල</button>
+<button id="enBtn" onclick="setMode('en')">English</button>
+<button id="emojiBtn" onclick="setMode('emoji')">😀 Emoji</button>
+<button class="blue" onclick="copyText()">Copy</button>
+<button onclick="clearText()">Clear</button>
+</div>
+<section class="keyboard" id="keyboard" aria-label="On-screen keyboard"></section>
+<p class="hint">මෙය වෙබ් පිටුව තුළ ක්‍රියා කරන On-screen Keyboard එකකි. වෙනත් Apps වල Android system keyboard එකක් ලෙස භාවිතා කිරීමට නොහැක.</p>
+<footer> ZANTA KEYBOARD · Made for mobile</footer>
+</main>
+<script>
+const layouts={
+en:[
+['q','w','e','r','t','y','u','i','o','p'],
+['a','s','d','f','g','h','j','k','l'],
+['⇧','z','x','c','v','b','n','m','⌫'],
+['?123',',','SPACE','.','↵']
+],
+si:[
+['අ','ආ','ඇ','ඈ','ඉ','ඊ','උ','ඌ','එ','ඒ'],
+['ඔ','ඕ','ක','ඛ','ග','ඝ','ච','ජ','ට'],
+['ඩ','ණ','ත','ථ','ද','ධ','න','ප','බ'],
+['ම','ය','ර','ල','ව','ස','හ','ළ','ෆ'],
+['ං','ඃ','ැ','ෑ','ි','ී','ු','ූ','SPACE','⌫'],
+['?123',',','සි/EN','.','↵']
+],
+emoji:[
+['😀','😁','😂','🤣','😊','😍','🥰','😘'],
+['😎','😭','😢','😡','🤔','🙄','😴','🤗'],
+['❤️','💕','💖','🔥','✨','👍','🙏','👏'],
+['🎉','💯','🌹','🌸','🥺','😇','🤝','☀️'],
+['ABC','SPACE','⌫','↵']
+]
+};
+let mode='si',shift=false;
+const box=document.getElementById('output'), keyboard=document.getElementById('keyboard');
+function setMode(m){mode=m;document.querySelectorAll('.toolbar button').forEach(b=>b.classList.remove('active'));document.getElementById(({si:'siBtn',en:'enBtn',emoji:'emojiBtn'})[m]).classList.add('active');render()}
+function insert(value){const start=box.selectionStart,end=box.selectionEnd;box.setRangeText(value,start,end,'end');box.focus()}
+function press(k){
+ if(k==='SPACE'){insert(' ');return}
+ if(k==='↵'){insert('\\n');return}
+ if(k==='⌫'){let s=box.selectionStart,e=box.selectionEnd;if(s===e&&s>0)s--;box.setRangeText('',s,e,'end');box.focus();return}
+ if(k==='⇧'){shift=!shift;render();return}
+ if(k==='ABC'){setMode('en');return}
+ if(k==='සි/EN'){setMode(mode==='si'?'en':'si');return}
+ if(k==='?123'){setMode('emoji');return}
+ insert(mode==='en'&&shift?k.toUpperCase():k);if(shift){shift=false;render()}
+}
+function render(){keyboard.innerHTML='';layouts[mode].forEach(row=>{let r=document.createElement('div');r.className='row';row.forEach(k=>{let b=document.createElement('button');b.type='button';b.className='key'+(['SPACE'].includes(k)?' space':'')+(['⇧','?123','සි/EN','ABC','↵'].includes(k)?' special':'')+(k==='⌫'?' danger':'');b.textContent=k==='SPACE'?'Space':k;b.onclick=()=>press(k);r.appendChild(b)});keyboard.appendChild(r)})}
+async function copyText(){try{await navigator.clipboard.writeText(box.value);alert('Copied!')}catch(e){box.select();document.execCommand('copy');alert('Copied!')}}
+function clearText(){box.value='';box.focus()}
+render();
+</script>
 </body>
 </html>
