@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#080d18">
+<title>ZANTA CITY | Open World Racing</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="boot"><div class="boot-logo">Z</div><div class="boot-title">ZANTA CITY</div><div class="boot-sub">OPEN WORLD RACING</div><div class="boot-bar"><i></i></div><small>GENERATING CITY</small></div>
+<main id="app">
+  <div class="vignette"></div>
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">Z</div><div><b>ZANTA CITY</b><small>OPEN WORLD RACING</small></div></div>
+    <div class="top-actions"><button id="cameraBtn">◉ CAMERA</button><button id="soundBtn">♫ SOUND ON</button></div>
+  </header>
+  <section id="mainMenu" class="menu">
+    <div class="menu-copy">
+      <div class="tag"><span></span> THE CITY IS YOURS</div>
+      <h1>DRIVE<br><em>YOUR WORLD.</em></h1>
+      <p>Explore the streets, find your line and own the road. Your city. Your rules.</p>
+      <div class="menu-buttons">
+        <button id="freeDrive" class="btn-primary">FREE DRIVE <b>↗</b></button>
+        <button id="startRace" class="btn-outline">CITY RACE <b>🏁</b></button>
+      </div>
+      <div class="features"><span>▰ OPEN CITY</span><span>▰ STREET RACING</span><span>▰ FREE ROAM</span></div>
+    </div>
+    <div class="menu-side"><div class="side-line"></div><span>01 / ZANTA DISTRICT</span><strong>EXPLORE<br>THE UNKNOWN</strong></div>
+  </section>
+  <section id="hud" class="hidden">
+    <div class="hud-card speed-card"><small>VEHICLE SPEED</small><div><strong id="speed">000</strong><i>KM/H</i></div><div class="speed-track"><i id="speedFill"></i></div></div>
+    <div class="hud-card objective"><small id="modeLabel">FREE DRIVE</small><b id="mission">Explore Zanta City</b><span id="checkpointCount">CITY IS OPEN</span></div>
+    <div class="hud-tools"><button id="backMenu">Ⅱ &nbsp; MENU</button></div>
+  </section>
+  <div id="mobileControls" class="hidden">
+    <div class="steer"><button data-control="left">‹</button><button data-control="right">›</button></div>
+    <div class="pedals"><button data-control="brake" class="brake">BRAKE</button><button data-control="nitro" class="nitro">N₂O</button><button data-control="gas" class="gas">GO</button></div>
+  </div>
+  <div id="rotateNotice"><div class="rotate-icon">▱</div><b>ROTATE YOUR DEVICE</b><small>ZANTA CITY is best played in landscape mode.</small></div>
+  <div id="toast"></div>
+</main>
+<script type="module" src="/game.js"></script>
+</body></html>
