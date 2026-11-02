@@ -1,160 +1,606 @@
-<!doctype html>
-<html lang="si">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZANTA MODS • Public Chat</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZANTA AI APP</title>
+
 <style>
-:root{--bg:#080b12;--panel:#111827;--panel2:#182235;--line:#29364d;--red:#ef334b;--blue:#258cff;--text:#f4f7ff;--muted:#9aa8bf;--mine:#173f69}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#17243a,#080b12 55%);color:var(--text);font:15px system-ui,"Noto Sans Sinhala",sans-serif;min-height:100vh}
-button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;color:white;background:linear-gradient(110deg,var(--red),#a52650);font-weight:700}
-input{width:100%;background:#090f1b;border:1px solid var(--line);border-radius:12px;padding:13px;color:white;outline:none}input:focus{border-color:var(--blue)}
-.app{max-width:1100px;margin:auto;min-height:100vh;padding:18px;display:grid;grid-template-rows:auto 1fr;gap:15px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;background:#101827dd;border:1px solid var(--line);border-radius:18px}
-.logo{font-size:22px;font-weight:900;letter-spacing:1px}.logo span{color:var(--red)}.status{font-size:12px;color:#75e6a6}
-.layout{display:grid;grid-template-columns:330px 1fr;gap:15px;min-height:650px}
-.panel{background:#101827ed;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-width:0}
-.side{padding:16px}.side h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:8px;margin:10px 0}.row>*{min-width:0}.row button{white-space:nowrap}
-.hint{font-size:12px;color:var(--muted);line-height:1.6}.userlist{margin-top:15px;display:grid;gap:8px}
-.user{width:100%;text-align:left;background:#172235;border:1px solid #29364d;padding:12px;display:flex;align-items:center;gap:10px}
-.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--red),var(--blue));font-weight:900;flex:none}
-.user small{display:block;color:var(--muted);font-weight:400}.chat{display:flex;flex-direction:column;min-height:650px}
-.chathead{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.chathead strong{font-size:16px}.messages{flex:1;padding:18px;overflow:auto;display:flex;flex-direction:column;gap:10px;min-height:400px}
-.empty{margin:auto;text-align:center;color:var(--muted);max-width:300px;line-height:1.8}
-.bubble{max-width:min(78%,520px);padding:10px 13px;border-radius:15px;background:#1b293e;align-self:flex-start;overflow-wrap:anywhere}
-.bubble.mine{align-self:flex-end;background:var(--mine);border:1px solid #27649a}
-.meta{font-size:10px;color:#b6c5d9;margin-top:5px;text-align:right}
-.composer{display:flex;gap:8px;padding:13px;border-top:1px solid var(--line)}.composer input{flex:1}
-.note{color:#ffcf85;font-size:12px;line-height:1.6;margin-top:12px}
-@media(max-width:760px){.app{padding:10px}.layout{grid-template-columns:1fr;min-height:0}.side{min-height:220px}.chat{min-height:60vh}.messages{min-height:300px}.logo{font-size:18px}}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #080808;
+    color: white;
+    min-height: 100vh;
+}
+
+/* ═══════════════ HEADER ═══════════════ */
+
+header {
+    padding: 20px;
+    background: #111;
+    border-bottom: 1px solid #252525;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: #ff2525;
+}
+
+.api-box {
+    margin-top: 15px;
+}
+
+.api-box input {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    background: #1c1c1c;
+    border: 1px solid #333;
+    color: white;
+    outline: none;
+}
+
+/* ═══════════════ MAIN CONTENT ═══════════════ */
+
+main {
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+.page {
+    display: none;
+    animation: fade .3s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fade {
+    from {opacity: 0; transform: translateY(8px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.title {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.card {
+    background: #151515;
+    border: 1px solid #292929;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.red {
+    color: #ff2929;
+}
+
+/* ═══════════════ HOME ═══════════════ */
+
+.home-banner {
+    background: linear-gradient(135deg,#390000,#111,#250000);
+    padding: 30px 20px;
+    border-radius: 18px;
+    border: 1px solid #641515;
+    margin-bottom: 20px;
+}
+
+.home-banner h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.home-banner p {
+    color: #bbb;
+}
+
+/* ═══════════════ MUSIC ═══════════════ */
+
+input, button {
+    font-size: 15px;
+}
+
+.music-input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+    margin: 10px 0;
+}
+
+audio {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* ═══════════════ AI CHAT ═══════════════ */
+
+.chat-box {
+    height: 350px;
+    overflow-y: auto;
+    background: #111;
+    border: 1px solid #292929;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    max-width: 90%;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.user {
+    background: #651111;
+    margin-left: auto;
+}
+
+.bot {
+    background: #252525;
+}
+
+.chat-input {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-input input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px;
+    background: #222;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 10px;
+    outline: none;
+}
+
+.btn {
+    background: #e52525;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 18px;
+    cursor: pointer;
+}
+
+.btn:active {
+    transform: scale(.96);
+}
+
+/* ═══════════════ SETTINGS ═══════════════ */
+
+.setting-item {
+    padding: 17px;
+    background: #191919;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ═══════════════ BOTTOM NAVIGATION ═══════════════ */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 5px;
+    z-index: 100;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: #777;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.nav-btn span {
+    font-size: 21px;
+}
+
+.nav-btn.active {
+    color: #ff2929;
+}
+
 </style>
 </head>
-<body>
-<div class="app">
-<header><div><div class="logo">ZANTA <span>MODS</span></div><div class="hint">Public real-time chat</div></div><div id="connection" class="status">Connecting…</div></header>
-<div class="layout">
-<section class="panel side">
-  <h2>👤 ඔබේ නම</h2>
-  <div class="row"><input id="displayName" maxlength="24" placeholder="උදා: Zanta"></div>
-  <button id="joinBtn" style="width:100%">Chat එකට ඇතුළු වෙන්න</button>
-  <p class="hint">නමක් පමණක් භාවිතා කරයි. Password හෝ Login screen නැත. නම unique විය යුතුය.</p>
-  <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
-  <h2>🔍 පුද්ගලයෙක් සොයන්න</h2>
-  <div class="row"><input id="searchInput" maxlength="24" placeholder="නම ඇතුළත් කරන්න"><button id="searchBtn">Search</button></div>
-  <div id="users" class="userlist"><div class="hint">මුලින් නමක් දාලා Chat එකට ඇතුළු වෙන්න.</div></div>
-  <p class="note">⚠️ Public app එකක් නිසා ඕනෑම කෙනෙකුට නමක් තෝරාගත හැක. සැබෑ පුද්ගල අනන්‍යතාව තහවුරු නොවේ.</p>
-</section>
-<section class="panel chat">
-  <div class="chathead"><div><strong id="chatTitle">💬 Chat</strong><div id="chatSub" class="hint">කෙනෙක් සොයාගෙන chat එකක් ආරම්භ කරන්න</div></div></div>
-  <div id="messages" class="messages"><div class="empty">👋 ZANTA MODS වෙත සාදරයෙන් පිළිගනිමු.<br>නමක් දාලා ඇතුළු වෙලා කෙනෙක් සොයන්න.</div></div>
-  <form id="sendForm" class="composer"><input id="messageInput" maxlength="2000" placeholder="Message එකක් ලියන්න…" autocomplete="off" disabled><button id="sendBtn" disabled>Send</button></form>
-</section>
-</div>
-</div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-// ════════════════ FIREBASE CONFIGURATION ═════════════════
-const firebaseConfig = {
-  apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "PASTE_YOUR_FIREBASE_APP_ID"
-};
-// ════════════════ APP INITIALIZATION ═════════════════════
-const $ = id => document.getElementById(id);
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-let currentUser = null, activeChat = null, stopMessages = null;
-const setConnection = (s, ok=false) => { $("connection").textContent=s; $("connection").style.color=ok?"#75e6a6":"#ffb1b1"; };
-const cleanName = s => s.trim().replace(/\s+/g," ").slice(0,24);
-const nameKey = s => cleanName(s).toLocaleLowerCase();
-const chatKey = (a,b) => [a,b].sort().join("_");
-const safeText = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-// ════════════════ ANONYMOUS SESSION ══════════════════════
-try {
-  await signInAnonymously(auth);
-  onAuthStateChanged(auth, user => { currentUser=user; if(user) setConnection("Connected",true); });
-} catch(e) { setConnection("Firebase setup required"); console.error(e); alert("Firebase config සහ Anonymous Authentication සකස් කරන්න. විස්තර README එකේ ඇත."); }
-// ════════════════ CREATE PUBLIC DISPLAY NAME ═════════════
-$("joinBtn").onclick = async () => {
-  if(!currentUser) return alert("Firebase සම්බන්ධතාවය සකස් කර නැහැ.");
-  const name=cleanName($("displayName").value);
-  if(name.length<2) return alert("අවම වශයෙන් අකුරු 2ක නමක් ඇතුළත් කරන්න.");
-  const key=nameKey(name), nameRef=doc(db,"usernames",key), userRef=doc(db,"users",currentUser.uid);
-  try {
-    const existing=await getDoc(nameRef);
-    if(existing.exists() && existing.data().uid!==currentUser.uid) return alert("මේ නම දැනටමත් භාවිතා වෙනවා. වෙනත් නමක් තෝරන්න.");
-    await setDoc(nameRef,{uid:currentUser.uid,name,updatedAt:serverTimestamp()});
-    await setDoc(userRef,{uid:currentUser.uid,name,nameKey:key,updatedAt:serverTimestamp()},{merge:true});
-    $("displayName").value=name;
-    $("chatSub").textContent=`ඔබ ලෙස ${name} ඇතුළු වී ඇත`;
-    setConnection("Online",true);
-    alert("හරි! දැන් නමක් Search කරලා Chat කරන්න.");
-  } catch(e) { console.error(e); alert("නම සුරැකීමට නොහැකි වුණා: "+e.message); }
-};
-// ════════════════ SEARCH PUBLIC USERS ════════════════════
-$("searchBtn").onclick = async () => {
-  if(!currentUser) return alert("මුලින් Firebase සම්බන්ධ කරන්න.");
-  const key=nameKey($("searchInput").value);
-  if(key.length<2) return alert("සෙවීමට නමක් ඇතුළත් කරන්න.");
-  try {
-    const snap=await getDocs(query(collection(db,"usernames"),where("nameKey","==",key)));
-    // Name keys are stored as document IDs; exact lookup also supports case-insensitive names.
-    const exact=await getDoc(doc(db,"usernames",key));
-    const list=$("users"); list.innerHTML="";
-    if(!exact.exists()) { list.innerHTML='<div class="hint">මෙම නමෙන් user කෙනෙක් හමු වුණේ නැහැ.</div>'; return; }
-    const u=exact.data();
-    if(u.uid===currentUser.uid) { list.innerHTML='<div class="hint">ඒ ඔබේම නමයි.</div>'; return; }
-    const btn=document.createElement("button"); btn.className="user";
-    btn.innerHTML=`<span class="avatar">${safeText(u.name.slice(0,1).toUpperCase())}</span><span>${safeText(u.name)}<small>Chat ආරම්භ කරන්න</small></span>`;
-    btn.onclick=()=>openChat(u); list.appendChild(btn);
-  } catch(e) { console.error(e); alert("Search error: "+e.message); }
-};
-// ════════════════ OPEN REAL-TIME CHAT ═══════════════════
-async function openChat(other) {
-  if(!currentUser) return;
-  const me=await getDoc(doc(db,"users",currentUser.uid));
-  if(!me.exists()) return alert("මුලින් ඔබේ නම set කරන්න.");
-  const myName=me.data().name, id=chatKey(currentUser.uid,other.uid);
-  activeChat={id,other,myName};
-  await setDoc(doc(db,"chats",id),{participants:[currentUser.uid,other.uid],names:{[currentUser.uid]:myName,[other.uid]:other.name},updatedAt:serverTimestamp()},{merge:true});
-  $("chatTitle").textContent="💬 "+other.name;
-  $("chatSub").textContent="Private conversation • Real-time";
-  $("messageInput").disabled=false; $("sendBtn").disabled=false;
-  $("messages").innerHTML="";
-  if(stopMessages) stopMessages();
-  const q=query(collection(db,"chats",id,"messages"),orderBy("createdAt","asc"));
-  stopMessages=onSnapshot(q,snap=>{
-    const box=$("messages"); box.innerHTML="";
-    if(snap.empty) box.innerHTML='<div class="empty">පළමු Message එක යවන්න 👋</div>';
-    snap.forEach(d=>{
-      const m=d.data(), mine=m.senderId===currentUser.uid;
-      const el=document.createElement("div"); el.className="bubble"+(mine?" mine":"");
-      const time=m.createdAt?.toDate ? m.createdAt.toDate().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "Sending…";
-      el.innerHTML=`${safeText(m.text)}<div class="meta">${mine?"You":" "+safeText(m.senderName)} · ${time}</div>`;
-      box.appendChild(el);
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+
+<header>
+
+    <div class="logo">ZANTA <span style="color:white">AI</span></div>
+
+    <div class="api-box">
+        <input
+            type="password"
+            id="apiKey"
+            placeholder="Enter Your API Key"
+        >
+    </div>
+
+</header>
+
+
+<main>
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+
+<section class="page active" id="home">
+
+    <div class="home-banner">
+
+        <h1>WELCOME TO <span class="red">ZANTA</span></h1>
+
+        <p>Your personal music and AI application.</p>
+
+        <br>
+
+        <h3>Everything In One App.</h3>
+
+    </div>
+
+    <div class="card">
+        <h3 class="red">HOME</h3>
+        <br>
+        <p>Welcome to ZANTA AI.</p>
+        <br>
+        <p>Explore Music, Chat with AI and customize your application.</p>
+    </div>
+
+    <div class="card">
+        <h3>⚡ AI Assistant</h3>
+        <br>
+        <p>Chat with your personal AI assistant.</p>
+    </div>
+
+    <div class="card">
+        <h3>🎵 Music Player</h3>
+        <br>
+        <p>Play your favorite music.</p>
+    </div>
+
+</section>
+
+
+<!-- ═══════════════ MUSIC PAGE ═══════════════ -->
+
+<section class="page" id="music">
+
+    <h2 class="title">🎵 <span class="red">MUSIC</span></h2>
+
+    <div class="card">
+
+        <h3>Music Player</h3>
+
+        <p style="color:#aaa;margin-top:10px">
+            Select music from your device.
+        </p>
+
+        <input
+            type="file"
+            class="music-input"
+            id="musicFile"
+            accept="audio/*"
+        >
+
+        <audio id="audioPlayer" controls></audio>
+
+    </div>
+
+</section>
+
+
+<!-- ═══════════════ AI PAGE ═══════════════ -->
+
+<section class="page" id="ai">
+
+    <h2 class="title">🤖 <span class="red">AI CHAT</span></h2>
+
+    <div class="chat-box" id="chatBox">
+
+        <div class="message bot">
+            Hello! Welcome to ZANTA AI.
+
+            How can I help you?
+        </div>
+
+    </div>
+
+    <div class="chat-input">
+
+        <input
+            type="text"
+            id="userMessage"
+            placeholder="Message AI..."
+        >
+
+        <button class="btn" onclick="sendMessage()">
+            SEND
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ═══════════════ SETTINGS PAGE ═══════════════ -->
+
+<section class="page" id="settings">
+
+    <h2 class="title">⚙️ <span class="red">SETTINGS</span></h2>
+
+    <div class="setting-item">
+        <span>API Key Status</span>
+        <span class="red" id="apiStatus">Not Set</span>
+    </div>
+
+    <div class="setting-item">
+        <span>Save API Key</span>
+        <button class="btn" onclick="saveApi()">SAVE</button>
+    </div>
+
+    <div class="setting-item">
+        <span>Clear Chat</span>
+        <button class="btn" onclick="clearChat()">CLEAR</button>
+    </div>
+
+    <div class="setting-item">
+        <span>App Version</span>
+        <span class="red">1.0.0</span>
+    </div>
+
+    <div class="card">
+        <h3 class="red">ZANTA AI</h3>
+        <br>
+        <p>HTML Based Application</p>
+        <br>
+        <p>Designed for Mobile Devices.</p>
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ═══════════════ BOTTOM NAVIGATION ═══════════════ -->
+
+<nav class="bottom-nav">
+
+    <button class="nav-btn active" onclick="showPage('home',this)">
+        <span>⌂</span>
+        HOME
+    </button>
+
+    <button class="nav-btn" onclick="showPage('music',this)">
+        <span>♫</span>
+        MUSIC
+    </button>
+
+    <button class="nav-btn" onclick="showPage('ai',this)">
+        <span>🤖</span>
+        AI
+    </button>
+
+    <button class="nav-btn" onclick="showPage('settings',this)">
+        <span>⚙</span>
+        SETTINGS
+    </button>
+
+</nav>
+
+
+<script>
+
+/* ═══════════════ PAGE NAVIGATION ═══════════════ */
+
+function showPage(page,button) {
+
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
     });
-    box.scrollTop=box.scrollHeight;
-  },e=>{console.error(e);alert("Chat read error: "+e.message);});
+
+    document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('active');
+    });
+
+    document.getElementById(page).classList.add('active');
+
+    button.classList.add('active');
 }
-// ════════════════ SEND MESSAGE ═══════════════════════════
-$("sendForm").onsubmit=async e=>{
-  e.preventDefault();
-  const text=$("messageInput").value.trim();
-  if(!text||!activeChat||!currentUser) return;
-  $("sendBtn").disabled=true;
-  try {
-    await addDoc(collection(db,"chats",activeChat.id,"messages"),{text,senderId:currentUser.uid,senderName:activeChat.myName,createdAt:serverTimestamp()});
-    await setDoc(doc(db,"chats",activeChat.id),{updatedAt:serverTimestamp()},{merge:true});
-    $("messageInput").value="";
-  } catch(err) { console.error(err); alert("Message යවන්න බැරි වුණා: "+err.message); }
-  finally { $("sendBtn").disabled=false; }
-};
+
+
+/* ═══════════════ API KEY SYSTEM ═══════════════ */
+
+const apiInput = document.getElementById('apiKey');
+
+apiInput.value = localStorage.getItem('zanta_api_key') || '';
+
+function saveApi() {
+
+    const key = apiInput.value.trim();
+
+    if (!key) {
+        alert('Please enter API Key!');
+        return;
+    }
+
+    localStorage.setItem('zanta_api_key',key);
+
+    updateApiStatus();
+
+    alert('API Key Saved Successfully!');
+}
+
+function updateApiStatus() {
+
+    const key = localStorage.getItem('zanta_api_key');
+
+    document.getElementById('apiStatus').innerText =
+        key ? 'Connected' : 'Not Set';
+}
+
+updateApiStatus();
+
+
+/* ═══════════════ AI CHAT SYSTEM ═══════════════ */
+
+async function sendMessage() {
+
+    const input = document.getElementById('userMessage');
+
+    const chat = document.getElementById('chatBox');
+
+    const message = input.value.trim();
+
+    const apiKey = localStorage.getItem('zanta_api_key');
+
+    if (!message) return;
+
+    if (!apiKey) {
+        alert('Please enter and save your API Key first!');
+        return;
+    }
+
+    addMessage(message,'user');
+
+    input.value = '';
+
+    const loading = addMessage('Thinking...','bot');
+
+    try {
+
+        const url =
+            'https://supunofc.site/api/ai/ai/nova?q='
+            + encodeURIComponent(message)
+            + '&apikey='
+            + encodeURIComponent(apiKey);
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error('API Error: ' + response.status);
+        }
+
+        const data = await response.json();
+
+        loading.innerText =
+            data.answer ||
+            data.response ||
+            data.result ||
+            data.message ||
+            data.reply ||
+            JSON.stringify(data);
+
+    } catch(error) {
+
+        loading.innerText =
+            'Error: ' + error.message;
+
+    }
+
+    chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* ═══════════════ CHAT MESSAGE SYSTEM ═══════════════ */
+
+function addMessage(text,type) {
+
+    const chat = document.getElementById('chatBox');
+
+    const div = document.createElement('div');
+
+    div.className = 'message ' + type;
+
+    div.textContent = text;
+
+    chat.appendChild(div);
+
+    chat.scrollTop = chat.scrollHeight;
+
+    return div;
+}
+
+
+/* ═══════════════ ENTER TO SEND ═══════════════ */
+
+document.getElementById('userMessage')
+.addEventListener('keypress',function(e) {
+
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+
+});
+
+
+/* ═══════════════ CLEAR CHAT ═══════════════ */
+
+function clearChat() {
+
+    if (!confirm('Clear all messages?')) return;
+
+    document.getElementById('chatBox').innerHTML = '';
+
+    addMessage('Chat cleared. How can I help you?','bot');
+
+}
+
+
+/* ═══════════════ LOCAL MUSIC PLAYER ═══════════════ */
+
+document.getElementById('musicFile')
+.addEventListener('change',function(e) {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+
+    const player = document.getElementById('audioPlayer');
+
+    player.src = url;
+
+    player.play();
+
+});
+
 </script>
+
 </body>
 </html>
