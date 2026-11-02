@@ -20,6 +20,10 @@ const traffic=[];for(let i=0;i<16;i++){let g=new THREE.Group(),body=mat([0x2374b
 // Pedestrians: pairs/groups on sidewalks, with subtle idle movement and speech bubbles.
 const people=[];
 function makePerson(x,z,shirt){let g=new THREE.Group();cube(g,.38,.65,.28,M.skin,0,1.25,0);cube(g,.62,.7,.34,shirt,0,.72,0);cube(g,.18,.65,.2,M.dark,-.17,.12,0);cube(g,.18,.65,.2,M.dark,.17,.12,0);scene.add(g);g.position.set(x,0,z);return g;}
+// Player character used while exploring on foot.
+const player=makePerson(3,0,M.shirt[0]);player.scale.setScalar(1.12);player.visible=false;
+let inVehicle=true,driven=car,walkHeading=0;
+
 for(let i=0;i<28;i++){let vertical=i%2===0,x=vertical?(Math.floor(i/2)-7)*step+10:(Math.floor(i/2)%7-3)*step,z=vertical?(Math.floor(i/2)%7-3)*step:Math.floor(i/2)*step+10;let a=makePerson(x,z,M.shirt[i%4]);let b=makePerson(x+1.1,z+.6,M.shirt[(i+1)%4]);a.rotation.y=.7;b.rotation.y=-.8;people.push({a,b,phase:Math.random()*6});}
 const bubbleCanvas=document.createElement('canvas');bubbleCanvas.width=256;bubbleCanvas.height=80;const ctx=bubbleCanvas.getContext('2d');ctx.fillStyle='#f4f7ff';ctx.beginPath();ctx.roundRect(4,4,248,60,18);ctx.fill();ctx.fillStyle='#17243a';ctx.font='bold 22px Arial';ctx.fillText('Hey! Nice car!',18,42);const bubbleTex=new THREE.CanvasTexture(bubbleCanvas);const bubbleMat=new THREE.SpriteMaterial({map:bubbleTex,transparent:true});people.forEach((p,i)=>{let s=new THREE.Sprite(bubbleMat);s.scale.set(5,1.6,1);s.position.set(p.a.position.x+.5,3.2,p.a.position.z);scene.add(s);p.bubble=s;p.bubble.visible=i%3===0;});
 const checkpoints=[];for(let i=0;i<5;i++){let r=new THREE.Mesh(new THREE.TorusGeometry(5,.35,10,32),new THREE.MeshBasicMaterial({color:0xff3455}));r.position.set([0,88,88,-88,-88][i],3,[88,88,-88,-88,0][i]);if(i===0)r.position.set(0,3,-44);scene.add(r);checkpoints.push(r);}
@@ -32,9 +36,10 @@ document.querySelectorAll('[data-control]').forEach(b=>{let k=b.dataset.control;
 const $=id=>document.getElementById(id);function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800);}
 function show(id){$(id).classList.remove('hidden');}function hide(id){$(id).classList.add('hidden');}
 async function fullscreen(){try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();if(screen.orientation?.lock)await screen.orientation.lock('landscape');}catch(e){}}
-function start(isRace){race=isRace;running=true;cp=0;speed=0;car.position.set(0,0,0);heading=0;hide('mainMenu');show('hud');show('mobileControls');$('modeLabel').textContent=race?'CITY MISSION':'FREE DRIVE';$('mission').textContent=race?missions[missionIndex].name:'Explore Zanta City';$('checkpointCount').textContent=race?'0 / 5':'CITY IS OPEN';checkpoints.forEach((p,i)=>p.visible=race&&i===0);applySteering();fullscreen();}
+function start(isRace){race=isRace;running=true;cp=0;speed=0;car.position.set(0,0,0);heading=0;driven=car;inVehicle=true;car.visible=true;player.visible=false;hide('mainMenu');show('hud');show('mobileControls');$('modeLabel').textContent=race?'CITY MISSION':'FREE DRIVE';$('mission').textContent=race?missions[missionIndex].name:'Explore Zanta City';$('checkpointCount').textContent=race?'0 / 5':'CITY IS OPEN';checkpoints.forEach((p,i)=>p.visible=race&&i===0);updateControlMode();applySteering();fullscreen();}
 $('freeDrive').onclick=()=>start(false);$('startRace').onclick=()=>{$('missionOverlay').classList.remove('hidden');};
 $('backMenu').onclick=()=>{running=false;speed=0;show('mainMenu');hide('hud');hide('mobileControls');if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});};
+$('enterExitBtn').onclick=toggleVehicle;
 $('mapBtn').onclick=()=>{drawMap();show('mapOverlay');};$('shopBtn').onclick=()=>show('shopOverlay');$('settingsBtn').onclick=()=>show('settingsOverlay');
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>hide(b.dataset.close));
 $('missionList').addEventListener('click',e=>{let row=e.target.closest('.mission-row');if(!row)return;let i=[...$('missionList').children].indexOf(row);if(i>missionIndex&&!missions[i].done){toast('Complete earlier missions first');return;}missionIndex=i;hide('missionOverlay');start(true);});
@@ -42,21 +47,82 @@ $('saveSettings').onclick=()=>{steering=$('steeringSelect').value;volume=Number(
 function applySteering(){$('arrowControls').classList.toggle('hidden',steering!=='arrows');$('joystick').classList.toggle('hidden',steering!=='joystick');if(steering==='tilt'){if(DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function')DeviceOrientationEvent.requestPermission().catch(()=>{});toast('Tilt steering selected');}}
 let joyX=0;const joy=$('joystick'),stick=$('stick');function moveJoy(e){let r=joy.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),max=34;joyX=Math.max(-1,Math.min(1,dx/max));stick.style.transform=`translate(${joyX*max}px,${Math.max(-max,Math.min(max,dy))}px)`;}joy.addEventListener('pointerdown',e=>{joy.setPointerCapture(e.pointerId);moveJoy(e);});joy.addEventListener('pointermove',e=>{if(e.buttons)moveJoy(e);});['pointerup','pointercancel'].forEach(ev=>joy.addEventListener(ev,()=>{joyX=0;stick.style.transform='translate(0,0)';}));
 let tilt=0;addEventListener('deviceorientation',e=>{if(steering==='tilt'&&e.gamma!=null)tilt=Math.max(-1,Math.min(1,e.gamma/25));});
+
+function updateControlMode(){
+ $('enterExitBtn').textContent=inVehicle?'EXIT CAR':'ENTER CAR';
+ $('modeLabel').textContent=inVehicle?(race?'CITY MISSION':'FREE DRIVE'):'ON FOOT';
+ $('pedals').classList.toggle('hidden',!inVehicle);
+ $('footControls').classList.toggle('hidden',inVehicle);
+ $('arrowControls').classList.toggle('hidden',inVehicle||steering!=='arrows');
+ $('joystick').classList.toggle('hidden',inVehicle||steering!=='joystick');
+}
+function toggleVehicle(){
+ if(!running)return;
+ if(inVehicle){
+  const fwd=new THREE.Vector3(Math.sin(heading),0,-Math.cos(heading));
+  player.position.copy(driven.position).add(new THREE.Vector3(fwd.z,0,-fwd.x).multiplyScalar(2.5));
+  player.position.y=0;walkHeading=heading;player.rotation.y=walkHeading;player.visible=true;
+  if(driven===car)car.visible=false;else driven.userData.parked=true;
+  driven=player;inVehicle=false;speed=0;toast('You are on foot');updateControlMode();
+ }else{
+  let target=null,dist=9;
+  for(const t of traffic){const d=player.position.distanceTo(t.g.position);if(d<dist){dist=d;target=t;}}
+  if(target){
+   driven=target.g;target.g.userData.parked=false;target.g.visible=true;
+   player.visible=false;inVehicle=true;heading=driven.rotation.y;speed=0;toast('Traffic vehicle entered');updateControlMode();
+  }else if(player.position.distanceTo(car.position)<8){
+   driven=car;car.visible=true;player.visible=false;inVehicle=true;heading=car.rotation.y;speed=0;toast('Your car entered');updateControlMode();
+  }else toast('Move closer to a vehicle first');
+ }
+}
 function drawMap(){let c=$('bigMap'),x=c.getContext('2d'),w=c.width,h=c.height;x.fillStyle='#263b43';x.fillRect(0,0,w,h);x.fillStyle='#526d54';for(let i=0;i<20;i++)for(let j=0;j<15;j++)x.fillRect(i*48+2,j*44+2,42,38);x.strokeStyle='#aeb7bd';x.lineWidth=12;for(let i=0;i<11;i++){x.beginPath();x.moveTo(i*90,0);x.lineTo(i*90,h);x.stroke();x.beginPath();x.moveTo(0,i*65);x.lineTo(w,i*65);x.stroke();}x.fillStyle='#f7d88b';x.font='bold 22px Arial';x.fillText('ZANTA CITY',25,35);x.fillStyle='#ff3658';x.beginPath();x.arc(w/2,h/2,11,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.fillText('YOU',w/2+15,h/2+7);}
 $('bigMap').onclick=e=>{let r=e.currentTarget.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*900,z=(e.clientY-r.top)/r.height*650;toast('Waypoint set on city map');hide('mapOverlay');};
 let audioCtx=null,osc=null,gain=null;function initAudio(){if(audioCtx||!engineEnabled)return;try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();osc=audioCtx.createOscillator();gain=audioCtx.createGain();osc.type='sawtooth';osc.frequency.value=55;gain.gain.value=0;osc.connect(gain);gain.connect(audioCtx.destination);osc.start();}catch(e){}}
 document.addEventListener('pointerdown',()=>{if(engineEnabled)initAudio();},{once:true});
-const clock=new THREE.Clock();function frame(){requestAnimationFrame(frame);let dt=Math.min(clock.getDelta(),.04);
-if(running){let gas=keys.w||keys.arrowup||touch.gas,brake=keys.s||keys.arrowdown||touch.brake;let steer=steering==='tilt'?tilt:steering==='joystick'?joyX:((keys.a||keys.arrowleft||touch.left)?-1:0)+((keys.d||keys.arrowright||touch.right)?1:0);let nitro=keys.shift||touch.nitro;
-if(gas)speed=Math.min(speed+(nitro?31:18)*dt,nitro?58:39);else speed=Math.max(0,speed-6.5*dt);if(brake)speed=Math.max(-8,speed-30*dt);
-heading+=-steer*dt*(1.5+Math.abs(speed)*.035)*(speed<0?-1:1);car.rotation.y=heading;let f=new THREE.Vector3(Math.sin(heading),0,-Math.cos(heading)),old=car.position.clone();car.position.addScaledVector(f,speed*dt);
-let hit=buildingColliders.some(b=>Math.abs(car.position.x-b.x)<b.rx&&Math.abs(car.position.z-b.z)<b.rz);if(hit){car.position.copy(old);speed=0;toast('Building boundary — stay on the road');}
-car.position.x=THREE.MathUtils.clamp(car.position.x,-250,250);car.position.z=THREE.MathUtils.clamp(car.position.z,-250,250);
-traffic.forEach(t=>{let a=t.axis?'x':'z';t.g.position[a]+=t.v*t.dir*dt;if(t.g.position[a]>250)t.g.position[a]=-250;if(t.g.position[a]<-250)t.g.position[a]=250;});
-people.forEach((p,i)=>{let bob=Math.sin(clock.elapsedTime*2+p.phase)*.035;p.a.position.y=bob;p.b.position.y=-bob;p.bubble.position.set(p.a.position.x+.5,3.1+bob,p.a.position.z);});
-if(race&&cp<5&&car.position.distanceTo(checkpoints[cp].position)<7){checkpoints[cp].visible=false;cp++;if(cp<5)checkpoints[cp].visible=true;$('checkpointCount').textContent=cp+' / 5';$('mission').textContent=cp===5?'MISSION COMPLETE!':'Checkpoint '+(cp+1)+' / 5';if(cp===5){missions[missionIndex].done=true;credits+=500;missionIndex=Math.min(59,missionIndex+1);drawMissions();race=false;toast('Mission complete! +500 credits');}}
-$('speed').textContent=String(Math.round(Math.abs(speed)*3.6)).padStart(3,'0');$('speedFill').style.width=Math.min(100,Math.abs(speed)/58*100)+'%';
-if(osc&&gain&&audioCtx){osc.frequency.setTargetAtTime(48+Math.abs(speed)*2.3,audioCtx.currentTime,.08);gain.gain.setTargetAtTime(engineEnabled?volume*(gas?.055:.018):0,audioCtx.currentTime,.08);}
+
+const clock=new THREE.Clock();
+function frame(){
+ requestAnimationFrame(frame);let dt=Math.min(clock.getDelta(),.04);
+ if(running){
+  if(inVehicle){
+   const gas=keys.w||keys.arrowup||touch.gas,brake=keys.s||keys.arrowdown||touch.brake;
+   let steer=steering==='tilt'?tilt:steering==='joystick'?joyX:((keys.a||keys.arrowleft||touch.left)?-1:0)+((keys.d||keys.arrowright||touch.right)?1:0);
+   const nitro=keys.shift||touch.nitro;
+   if(gas)speed=Math.min(speed+(nitro?22:13)*dt,nitro?52:34);else speed*=Math.pow(.985,dt*60);
+   if(brake){if(speed>1)speed=Math.max(0,speed-27*dt);else speed=Math.max(-9,speed-13*dt);}
+   heading+=-steer*dt*(.65+Math.min(1,Math.abs(speed)/5)*1.45)*(speed<0?-1:1);
+   driven.rotation.y=heading;
+   const forward=new THREE.Vector3(Math.sin(heading),0,-Math.cos(heading)),old=driven.position.clone();
+   driven.position.addScaledVector(forward,speed*dt);
+   if(buildingColliders.some(b=>Math.abs(driven.position.x-b.x)<b.rx&&Math.abs(driven.position.z-b.z)<b.rz)){driven.position.copy(old);speed=0;}
+   driven.position.x=THREE.MathUtils.clamp(driven.position.x,-250,250);driven.position.z=THREE.MathUtils.clamp(driven.position.z,-250,250);
+   traffic.forEach(t=>{if(t.g===driven||t.g.userData.parked)return;let axis=t.axis?'x':'z';t.g.position[axis]+=t.v*t.dir*dt;if(t.g.position[axis]>250)t.g.position[axis]=-250;if(t.g.position[axis]<-250)t.g.position[axis]=250;});
+   $('speed').textContent=String(Math.round(Math.abs(speed)*3.6)).padStart(3,'0');
+   $('speedFill').style.width=Math.min(100,Math.abs(speed)/52*100)+'%';
+  }else{
+   const mx=((keys.d||keys.arrowright||touch.right)?1:0)-((keys.a||keys.arrowleft||touch.left)?1:0);
+   const mz=((keys.s||keys.arrowdown||touch.down)?1:0)-((keys.w||keys.arrowup||touch.up)?1:0);
+   const mag=Math.hypot(mx,mz)||1,dx=mx/mag*7.2*dt,dz=mz/mag*7.2*dt;
+   if(mx||mz){const old=player.position.clone();player.position.x+=dx;player.position.z+=dz;
+    if(buildingColliders.some(b=>Math.abs(player.position.x-b.x)<b.rx*.8&&Math.abs(player.position.z-b.z)<b.rz*.8))player.position.copy(old);
+    walkHeading=Math.atan2(mx,-mz);player.rotation.y=walkHeading;
+   }
+   $('speed').textContent='FOOT';$('speedFill').style.width='0%';
+  }
+  people.forEach(p=>{let bob=Math.sin(clock.elapsedTime*2+p.phase)*.035;p.a.position.y=bob;p.b.position.y=-bob;p.bubble.position.set(p.a.position.x+.5,3.1+bob,p.a.position.z);});
+  if(race&&inVehicle&&cp<5&&driven.position.distanceTo(checkpoints[cp].position)<7){
+   checkpoints[cp].visible=false;cp++;if(cp<5)checkpoints[cp].visible=true;
+   $('checkpointCount').textContent=cp+' / 5';$('mission').textContent=cp===5?'MISSION COMPLETE!':'Checkpoint '+(cp+1)+' / 5';
+   if(cp===5){missions[missionIndex].done=true;credits+=500;missionIndex=Math.min(59,missionIndex+1);drawMissions();race=false;toast('Mission complete! +500 credits');}
+  }
+  if(osc&&gain&&audioCtx){osc.frequency.setTargetAtTime(48+Math.abs(speed)*2.1,audioCtx.currentTime,.08);gain.gain.setTargetAtTime(engineEnabled&&inVehicle?volume*(keys.w||touch.gas?.055:.015):0,audioCtx.currentTime,.08);}
+ }
+ const angle=inVehicle?heading:walkHeading,forward=new THREE.Vector3(Math.sin(angle),0,-Math.cos(angle)),target=driven.position;
+ let desired;
+ if(camMode===0)desired=target.clone().add(new THREE.Vector3(0,inVehicle?7:5,0)).addScaledVector(forward,inVehicle?-11:-7);
+ else if(camMode===1)desired=target.clone().add(new THREE.Vector3(0,15,0)).addScaledVector(forward,-19);
+ else desired=target.clone().add(new THREE.Vector3(0,2.2,0)).addScaledVector(forward,2.8);
+ camera.position.lerp(desired,.14);camera.lookAt(target.clone().add(new THREE.Vector3(0,inVehicle?1:1.4,0)).addScaledVector(forward,inVehicle?5:2));
+ renderer.render(scene,camera);
 }
-let f=new THREE.Vector3(Math.sin(heading),0,-Math.cos(heading)),desired;if(camMode===0)desired=car.position.clone().add(new THREE.Vector3(0,7,0)).addScaledVector(f,-11);else if(camMode===1)desired=car.position.clone().add(new THREE.Vector3(0,15,0)).addScaledVector(f,-19);else desired=car.position.clone().add(new THREE.Vector3(0,2.2,0)).addScaledVector(f,2.8);camera.position.lerp(desired,.1);camera.lookAt(car.position.clone().add(new THREE.Vector3(0,1,0)).addScaledVector(f,camMode===2?12:5));renderer.render(scene,camera);}
 frame();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});$('boot').style.display='none';
