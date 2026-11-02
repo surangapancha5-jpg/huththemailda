@@ -1,50 +1,160 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#090b12"><title>ZANTA MODS</title>
+<html lang="si">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZANTA MODS • Public Chat</title>
 <style>
-:root{--bg:#090b12;--panel:#121725;--panel2:#1a2233;--line:#293449;--red:#ff3657;--blue:#258cff;--txt:#f4f6fb;--muted:#98a5bc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px system-ui,Arial;min-height:100vh}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 15px;color:white;background:linear-gradient(110deg,var(--red),#b22c70);font-weight:700}input{width:100%;padding:14px;background:#0b101b;border:1px solid var(--line);border-radius:12px;color:white;outline:none;margin:6px 0 13px}input:focus{border-color:var(--blue)}label{font-size:13px;color:var(--muted)}
-header{height:65px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#0d111c}.brand{font-weight:900;letter-spacing:2px;font-size:21px;color:var(--red)}.brand span{color:var(--blue)}
-.wrap{max-width:1050px;margin:auto;padding:20px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px}.auth{max-width:440px;margin:7vh auto}.sub{color:var(--muted);line-height:1.5}.hidden{display:none!important}.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{background:var(--panel2);flex:1}.tabs .on{background:linear-gradient(110deg,var(--red),#b22c70)}
-#app{display:grid;grid-template-columns:320px 1fr;gap:15px;height:calc(100vh - 105px);min-height:500px}.side,.chat{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}.sidehead,.chathead{padding:15px;border-bottom:1px solid var(--line)}.userline{display:flex;align-items:center;gap:10px}.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--blue));display:grid;place-items:center;font-weight:900}
-#userList{overflow:auto}.person{display:flex;gap:10px;padding:13px 15px;border-bottom:1px solid #222b3a;cursor:pointer}.person:hover{background:var(--panel2)}.person small{display:block;color:var(--muted);margin-top:4px}
-.messages{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:10px}.bubble{max-width:78%;padding:10px 13px;border-radius:15px;background:#202a3d;align-self:flex-start;overflow-wrap:anywhere}.bubble.mine{background:#792b50;align-self:flex-end}.bubble small{display:block;color:#d5d8e4aa;font-size:10px;margin-top:5px;text-align:right}
-.send{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}.send input{margin:0}.send button{white-space:nowrap}.error{color:#ff8295;white-space:pre-wrap;font-size:13px}.notice{font-size:12px;color:var(--muted);margin-top:12px}
-@media(max-width:700px){.wrap{padding:10px}#app{display:block;height:calc(100dvh - 85px);min-height:0}.side{height:100%}.chat{height:100%;display:none}#app.chat-open .side{display:none}#app.chat-open .chat{display:flex}.auth{margin:4vh auto}}
-</style></head><body>
-<header><div class="brand">ZANTA <span>MODS</span></div><button id="logout" class="hidden">Log out</button></header>
-<main class="wrap">
-<section id="auth" class="card auth"><h2 id="authTitle">Create your account</h2><p class="sub">Register with a unique username and password.</p>
-<div class="tabs"><button id="registerTab" class="on">Register</button><button id="loginTab">Login</button></div>
-<div id="registerFields"><label>Username (3–24 characters)</label><input id="username" placeholder="zanta_user" maxlength="24" autocomplete="username"><label>Password (at least 8 characters)</label><input id="password" type="password" autocomplete="new-password"><button id="register" style="width:100%">Create account</button></div>
-<div id="loginFields" class="hidden"><label>Username</label><input id="loginUsername" placeholder="Your username" autocomplete="username"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"><button id="login" style="width:100%">Login</button></div>
-<p id="authError" class="error"></p><p class="notice">Use a unique password. This demo does not ask for your phone number or OTP.</p></section>
-<section id="app" class="hidden"><aside class="side"><div class="sidehead"><div class="userline"><div class="avatar" id="myAvatar">Z</div><div><strong id="myName"></strong><div class="sub">Search users by username</div></div></div><input id="search" placeholder="Search username…"></div><div id="userList"></div></aside>
-<section class="chat"><div class="chathead" style="display:flex;gap:10px;align-items:center"><button id="back" class="hidden" style="background:#273149">←</button><div><strong id="chatName">Choose a user</strong><div class="sub" id="chatSub">Private conversation</div></div></div><div class="messages" id="messages"><p class="sub">Search for a username to start chatting.</p></div><form class="send" id="sendForm"><input id="messageInput" placeholder="Write a message…" maxlength="4000" disabled><button id="sendButton" disabled>Send</button></form></section></section></main>
+:root{--bg:#080b12;--panel:#111827;--panel2:#182235;--line:#29364d;--red:#ef334b;--blue:#258cff;--text:#f4f7ff;--muted:#9aa8bf;--mine:#173f69}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#17243a,#080b12 55%);color:var(--text);font:15px system-ui,"Noto Sans Sinhala",sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;color:white;background:linear-gradient(110deg,var(--red),#a52650);font-weight:700}
+input{width:100%;background:#090f1b;border:1px solid var(--line);border-radius:12px;padding:13px;color:white;outline:none}input:focus{border-color:var(--blue)}
+.app{max-width:1100px;margin:auto;min-height:100vh;padding:18px;display:grid;grid-template-rows:auto 1fr;gap:15px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;background:#101827dd;border:1px solid var(--line);border-radius:18px}
+.logo{font-size:22px;font-weight:900;letter-spacing:1px}.logo span{color:var(--red)}.status{font-size:12px;color:#75e6a6}
+.layout{display:grid;grid-template-columns:330px 1fr;gap:15px;min-height:650px}
+.panel{background:#101827ed;border:1px solid var(--line);border-radius:18px;overflow:hidden;min-width:0}
+.side{padding:16px}.side h2{font-size:17px;margin:0 0 12px}.row{display:flex;gap:8px;margin:10px 0}.row>*{min-width:0}.row button{white-space:nowrap}
+.hint{font-size:12px;color:var(--muted);line-height:1.6}.userlist{margin-top:15px;display:grid;gap:8px}
+.user{width:100%;text-align:left;background:#172235;border:1px solid #29364d;padding:12px;display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--red),var(--blue));font-weight:900;flex:none}
+.user small{display:block;color:var(--muted);font-weight:400}.chat{display:flex;flex-direction:column;min-height:650px}
+.chathead{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.chathead strong{font-size:16px}.messages{flex:1;padding:18px;overflow:auto;display:flex;flex-direction:column;gap:10px;min-height:400px}
+.empty{margin:auto;text-align:center;color:var(--muted);max-width:300px;line-height:1.8}
+.bubble{max-width:min(78%,520px);padding:10px 13px;border-radius:15px;background:#1b293e;align-self:flex-start;overflow-wrap:anywhere}
+.bubble.mine{align-self:flex-end;background:var(--mine);border:1px solid #27649a}
+.meta{font-size:10px;color:#b6c5d9;margin-top:5px;text-align:right}
+.composer{display:flex;gap:8px;padding:13px;border-top:1px solid var(--line)}.composer input{flex:1}
+.note{color:#ffcf85;font-size:12px;line-height:1.6;margin-top:12px}
+@media(max-width:760px){.app{padding:10px}.layout{grid-template-columns:1fr;min-height:0}.side{min-height:220px}.chat{min-height:60vh}.messages{min-height:300px}.logo{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="logo">ZANTA <span>MODS</span></div><div class="hint">Public real-time chat</div></div><div id="connection" class="status">Connecting…</div></header>
+<div class="layout">
+<section class="panel side">
+  <h2>👤 ඔබේ නම</h2>
+  <div class="row"><input id="displayName" maxlength="24" placeholder="උදා: Zanta"></div>
+  <button id="joinBtn" style="width:100%">Chat එකට ඇතුළු වෙන්න</button>
+  <p class="hint">නමක් පමණක් භාවිතා කරයි. Password හෝ Login screen නැත. නම unique විය යුතුය.</p>
+  <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+  <h2>🔍 පුද්ගලයෙක් සොයන්න</h2>
+  <div class="row"><input id="searchInput" maxlength="24" placeholder="නම ඇතුළත් කරන්න"><button id="searchBtn">Search</button></div>
+  <div id="users" class="userlist"><div class="hint">මුලින් නමක් දාලා Chat එකට ඇතුළු වෙන්න.</div></div>
+  <p class="note">⚠️ Public app එකක් නිසා ඕනෑම කෙනෙකුට නමක් තෝරාගත හැක. සැබෑ පුද්ගල අනන්‍යතාව තහවුරු නොවේ.</p>
+</section>
+<section class="panel chat">
+  <div class="chathead"><div><strong id="chatTitle">💬 Chat</strong><div id="chatSub" class="hint">කෙනෙක් සොයාගෙන chat එකක් ආරම්භ කරන්න</div></div></div>
+  <div id="messages" class="messages"><div class="empty">👋 ZANTA MODS වෙත සාදරයෙන් පිළිගනිමු.<br>නමක් දාලා ඇතුළු වෙලා කෙනෙක් සොයන්න.</div></div>
+  <form id="sendForm" class="composer"><input id="messageInput" maxlength="2000" placeholder="Message එකක් ලියන්න…" autocomplete="off" disabled><button id="sendBtn" disabled>Send</button></form>
+</section>
+</div>
+</div>
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getFirestore,doc,setDoc,getDoc,collection,query,where,getDocs,addDoc,orderBy,onSnapshot,serverTimestamp,runTransaction} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-// Replace placeholders with your Firebase Web App config.
-const firebaseConfig={apiKey:"PASTE_FIREBASE_API_KEY",authDomain:"PASTE_PROJECT_ID.firebaseapp.com",projectId:"PASTE_PROJECT_ID",storageBucket:"PASTE_PROJECT_ID.appspot.com",messagingSenderId:"PASTE_SENDER_ID",appId:"PASTE_APP_ID"};
-const $=id=>document.getElementById(id);let auth,db,currentUser=null,currentProfile=null,activePeer=null,stopMessages=null;
-function error(e){$("authError").textContent=e?.message||String(e)}
-function configured(){return firebaseConfig.apiKey.startsWith("AIza")&&!firebaseConfig.projectId.startsWith("PASTE")}
-if(configured()){const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);onAuthStateChanged(auth,async u=>{if(u){currentUser=u;const s=await getDoc(doc(db,"users",u.uid));if(s.exists()){currentProfile=s.data();showApp()}else{await signOut(auth);error("Account profile missing.")}}else showAuth()})}
-else error("Setup required: add Firebase Web App config in this file.");
-function emailFor(name){return name.toLowerCase()+"@users.zantamods.invalid"}
-function showAuth(){$("auth").classList.remove("hidden");$("app").classList.add("hidden");$("logout").classList.add("hidden")}
-function showApp(){$("auth").classList.add("hidden");$("app").classList.remove("hidden");$("logout").classList.remove("hidden");$("myName").textContent=currentProfile.username;$("myAvatar").textContent=currentProfile.username[0].toUpperCase()}
-$("registerTab").onclick=()=>{ $("registerTab").classList.add("on");$("loginTab").classList.remove("on");$("registerFields").classList.remove("hidden");$("loginFields").classList.add("hidden");$("authTitle").textContent="Create your account";error("")};
-$("loginTab").onclick=()=>{$("loginTab").classList.add("on");$("registerTab").classList.remove("on");$("loginFields").classList.remove("hidden");$("registerFields").classList.add("hidden");$("authTitle").textContent="Welcome back";error("")};
-$("register").onclick=async()=>{try{if(!configured())throw Error("Firebase config is not set.");const name=$("username").value.trim(),pass=$("password").value;if(!/^[a-zA-Z0-9_]{3,24}$/.test(name))throw Error("Username must be 3–24 letters, numbers or underscore.");if(pass.length<8)throw Error("Password must be at least 8 characters.");const key=name.toLowerCase(),nameRef=doc(db,"usernames",key);const cred=await createUserWithEmailAndPassword(auth,emailFor(key),pass);try{await runTransaction(db,async tx=>{const existing=await tx.get(nameRef);if(existing.exists())throw Error("That username is already taken.");tx.set(nameRef,{uid:cred.user.uid});tx.set(doc(db,"users",cred.user.uid),{uid:cred.user.uid,username:name,usernameLower:key,createdAt:serverTimestamp()})})}catch(e){await cred.user.delete();throw e}}catch(e){error(e)}};
-$("login").onclick=async()=>{try{if(!configured())throw Error("Firebase config is not set.");const name=$("loginUsername").value.trim().toLowerCase(),pass=$("loginPassword").value;if(!/^[a-zA-Z0-9_]{3,24}$/.test(name))throw Error("Enter a valid username.");await signInWithEmailAndPassword(auth,emailFor(name),pass)}catch(e){error(e)}};
-$("logout").onclick=()=>signOut(auth);
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-$("search").oninput=async()=>{const term=$("search").value.trim().toLowerCase();$("userList").innerHTML="";if(term.length<2)return;try{const q=query(collection(db,"users"),where("usernameLower",">=",term),where("usernameLower","<=",term+"\uf8ff"));const snaps=await getDocs(q);snaps.forEach(s=>{const u=s.data();if(u.uid===currentUser.uid)return;const el=document.createElement("div");el.className="person";el.innerHTML=`<div class="avatar">${escapeHtml(u.username[0].toUpperCase())}</div><div><strong>${escapeHtml(u.username)}</strong><small>Tap to message</small></div>`;el.onclick=()=>openChat(u);$("userList").appendChild(el)})}catch(e){error(e)}};
-function threadId(a,b){return[a,b].sort().join("_")}
-async function openChat(peer){activePeer=peer;$("chatName").textContent=peer.username;$("messageInput").disabled=false;$("sendButton").disabled=false;$("back").classList.remove("hidden");$("app").classList.add("chat-open");if(stopMessages)stopMessages();const id=threadId(currentUser.uid,peer.uid),ref=doc(db,"chats",id);await setDoc(ref,{participants:[currentUser.uid,peer.uid],updatedAt:serverTimestamp()},{merge:true});stopMessages=onSnapshot(query(collection(db,"chats",id,"messages"),orderBy("createdAt","asc")),snap=>{const box=$("messages");box.innerHTML="";snap.forEach(s=>{const m=s.data(),b=document.createElement("div");b.className="bubble"+(m.senderId===currentUser.uid?" mine":"");b.textContent=m.text;const t=document.createElement("small");t.textContent=m.createdAt?.toDate?.().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})||"Sending…";b.appendChild(t);box.appendChild(b)});box.scrollTop=box.scrollHeight})}
-$("back").onclick=()=>$("app").classList.remove("chat-open");
-$("sendForm").onsubmit=async e=>{e.preventDefault();const text=$("messageInput").value.trim();if(!text||!activePeer)return;$("messageInput").value="";try{const id=threadId(currentUser.uid,activePeer.uid);await addDoc(collection(db,"chats",id,"messages"),{text,senderId:currentUser.uid,createdAt:serverTimestamp()});await setDoc(doc(db,"chats",id),{participants:[currentUser.uid,activePeer.uid],lastMessage:text,updatedAt:serverTimestamp()},{merge:true})}catch(e){error(e);$("messageInput").value=text}};
-</script></body></html>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+// ════════════════ FIREBASE CONFIGURATION ═════════════════
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  appId: "PASTE_YOUR_FIREBASE_APP_ID"
+};
+// ════════════════ APP INITIALIZATION ═════════════════════
+const $ = id => document.getElementById(id);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+let currentUser = null, activeChat = null, stopMessages = null;
+const setConnection = (s, ok=false) => { $("connection").textContent=s; $("connection").style.color=ok?"#75e6a6":"#ffb1b1"; };
+const cleanName = s => s.trim().replace(/\s+/g," ").slice(0,24);
+const nameKey = s => cleanName(s).toLocaleLowerCase();
+const chatKey = (a,b) => [a,b].sort().join("_");
+const safeText = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// ════════════════ ANONYMOUS SESSION ══════════════════════
+try {
+  await signInAnonymously(auth);
+  onAuthStateChanged(auth, user => { currentUser=user; if(user) setConnection("Connected",true); });
+} catch(e) { setConnection("Firebase setup required"); console.error(e); alert("Firebase config සහ Anonymous Authentication සකස් කරන්න. විස්තර README එකේ ඇත."); }
+// ════════════════ CREATE PUBLIC DISPLAY NAME ═════════════
+$("joinBtn").onclick = async () => {
+  if(!currentUser) return alert("Firebase සම්බන්ධතාවය සකස් කර නැහැ.");
+  const name=cleanName($("displayName").value);
+  if(name.length<2) return alert("අවම වශයෙන් අකුරු 2ක නමක් ඇතුළත් කරන්න.");
+  const key=nameKey(name), nameRef=doc(db,"usernames",key), userRef=doc(db,"users",currentUser.uid);
+  try {
+    const existing=await getDoc(nameRef);
+    if(existing.exists() && existing.data().uid!==currentUser.uid) return alert("මේ නම දැනටමත් භාවිතා වෙනවා. වෙනත් නමක් තෝරන්න.");
+    await setDoc(nameRef,{uid:currentUser.uid,name,updatedAt:serverTimestamp()});
+    await setDoc(userRef,{uid:currentUser.uid,name,nameKey:key,updatedAt:serverTimestamp()},{merge:true});
+    $("displayName").value=name;
+    $("chatSub").textContent=`ඔබ ලෙස ${name} ඇතුළු වී ඇත`;
+    setConnection("Online",true);
+    alert("හරි! දැන් නමක් Search කරලා Chat කරන්න.");
+  } catch(e) { console.error(e); alert("නම සුරැකීමට නොහැකි වුණා: "+e.message); }
+};
+// ════════════════ SEARCH PUBLIC USERS ════════════════════
+$("searchBtn").onclick = async () => {
+  if(!currentUser) return alert("මුලින් Firebase සම්බන්ධ කරන්න.");
+  const key=nameKey($("searchInput").value);
+  if(key.length<2) return alert("සෙවීමට නමක් ඇතුළත් කරන්න.");
+  try {
+    const snap=await getDocs(query(collection(db,"usernames"),where("nameKey","==",key)));
+    // Name keys are stored as document IDs; exact lookup also supports case-insensitive names.
+    const exact=await getDoc(doc(db,"usernames",key));
+    const list=$("users"); list.innerHTML="";
+    if(!exact.exists()) { list.innerHTML='<div class="hint">මෙම නමෙන් user කෙනෙක් හමු වුණේ නැහැ.</div>'; return; }
+    const u=exact.data();
+    if(u.uid===currentUser.uid) { list.innerHTML='<div class="hint">ඒ ඔබේම නමයි.</div>'; return; }
+    const btn=document.createElement("button"); btn.className="user";
+    btn.innerHTML=`<span class="avatar">${safeText(u.name.slice(0,1).toUpperCase())}</span><span>${safeText(u.name)}<small>Chat ආරම්භ කරන්න</small></span>`;
+    btn.onclick=()=>openChat(u); list.appendChild(btn);
+  } catch(e) { console.error(e); alert("Search error: "+e.message); }
+};
+// ════════════════ OPEN REAL-TIME CHAT ═══════════════════
+async function openChat(other) {
+  if(!currentUser) return;
+  const me=await getDoc(doc(db,"users",currentUser.uid));
+  if(!me.exists()) return alert("මුලින් ඔබේ නම set කරන්න.");
+  const myName=me.data().name, id=chatKey(currentUser.uid,other.uid);
+  activeChat={id,other,myName};
+  await setDoc(doc(db,"chats",id),{participants:[currentUser.uid,other.uid],names:{[currentUser.uid]:myName,[other.uid]:other.name},updatedAt:serverTimestamp()},{merge:true});
+  $("chatTitle").textContent="💬 "+other.name;
+  $("chatSub").textContent="Private conversation • Real-time";
+  $("messageInput").disabled=false; $("sendBtn").disabled=false;
+  $("messages").innerHTML="";
+  if(stopMessages) stopMessages();
+  const q=query(collection(db,"chats",id,"messages"),orderBy("createdAt","asc"));
+  stopMessages=onSnapshot(q,snap=>{
+    const box=$("messages"); box.innerHTML="";
+    if(snap.empty) box.innerHTML='<div class="empty">පළමු Message එක යවන්න 👋</div>';
+    snap.forEach(d=>{
+      const m=d.data(), mine=m.senderId===currentUser.uid;
+      const el=document.createElement("div"); el.className="bubble"+(mine?" mine":"");
+      const time=m.createdAt?.toDate ? m.createdAt.toDate().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "Sending…";
+      el.innerHTML=`${safeText(m.text)}<div class="meta">${mine?"You":" "+safeText(m.senderName)} · ${time}</div>`;
+      box.appendChild(el);
+    });
+    box.scrollTop=box.scrollHeight;
+  },e=>{console.error(e);alert("Chat read error: "+e.message);});
+}
+// ════════════════ SEND MESSAGE ═══════════════════════════
+$("sendForm").onsubmit=async e=>{
+  e.preventDefault();
+  const text=$("messageInput").value.trim();
+  if(!text||!activeChat||!currentUser) return;
+  $("sendBtn").disabled=true;
+  try {
+    await addDoc(collection(db,"chats",activeChat.id,"messages"),{text,senderId:currentUser.uid,senderName:activeChat.myName,createdAt:serverTimestamp()});
+    await setDoc(doc(db,"chats",activeChat.id),{updatedAt:serverTimestamp()},{merge:true});
+    $("messageInput").value="";
+  } catch(err) { console.error(err); alert("Message යවන්න බැරි වුණා: "+err.message); }
+  finally { $("sendBtn").disabled=false; }
+};
+</script>
+</body>
+</html>
